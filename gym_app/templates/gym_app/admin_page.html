@@ -1,0 +1,37 @@
+{% extends "gym_app/base.html" %}
+{% block content %}
+<h2 class="page-title">Користувачі</h2>
+<div class="card">
+    <div class="card-header">All Users</div>
+    <div class="card-body">
+        <form method="get" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search" value="{{ query|default:'' }}">
+                <button type="submit" class="btn btn-primary">Пошук</button>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Users Name</th>
+                        <th>Email</th>
+                        <th>Superuser</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for u in users %}
+                    <tr>
+                        <td>{{ u.username }}</td>
+                        <td>{{ u.email }}</td>
+                        <td>{% if u.is_superuser %}Так{% else %}Ні{% endif %}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="3" class="text-center">Немає результатів</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

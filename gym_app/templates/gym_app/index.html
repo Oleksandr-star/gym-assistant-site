@@ -1,0 +1,42 @@
+{% extends "gym_app/base.html" %}
+{% block content %}
+<h2 class="page-title">Привіт, {{ user.username }}</h2>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Останні вправи</div>
+            <div class="card-body">
+                {% if exercises %}
+                <ul class="list-unstyled">
+                    {% for ex in exercises %}
+                    <li class="mb-2">
+                        <strong>{{ ex.name }}</strong> – {{ ex.weight }} кг × {{ ex.reps }}
+                        <br><small class="text-muted">{{ ex.date|date:"d.m.Y" }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>Ще не додано жодної вправи.</p>
+                {% endif %}
+                <a href="{% url 'exercise' %}" class="btn btn-primary mt-2">Перейти до вправ</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Остання вага</div>
+            <div class="card-body stats-card">
+                {% if weights %}
+                    {% for w in weights %}
+                    <h3>{{ w.weight }} кг</h3>
+                    <p>{{ w.date|date:"d.m.Y" }}</p>
+                    {% endfor %}
+                {% else %}
+                    <p>Немає записів</p>
+                {% endif %}
+                <a href="{% url 'weight' %}" class="btn btn-primary mt-2">Відстежувати вагу</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

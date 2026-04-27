@@ -1,0 +1,59 @@
+{% extends "gym_app/base.html" %}
+{% block content %}
+<h2 class="page-title">Нова вправа</h2>
+<div class="row justify-content-center">
+    <div class="col-lg-5 col-md-8">
+        <div class="card">
+            <div class="card-header">Додати вправу</div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Назва вправи</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Вага (кг)</label>
+                        {{ form.weight }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Кількість повторень</label>
+                        {{ form.reps }}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Додати вправу</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="page-title mt-5">Мої вправи</h2>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Вправа</th>
+                        <th>Вага (кг)</th>
+                        <th>Повтори</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for ex in history %}
+                    <tr>
+                        <td>{{ ex.date|date:"d.m.Y" }}</td>
+                        <td>{{ ex.name }}</td>
+                        <td>{{ ex.weight }}</td>
+                        <td>{{ ex.reps }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4" class="text-center">Ще не додано жодної вправи</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
