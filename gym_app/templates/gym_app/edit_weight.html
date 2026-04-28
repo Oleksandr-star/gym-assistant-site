@@ -1,0 +1,17 @@
+{% extends "gym_app/base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5 col-md-8">
+        <div class="card">
+            <div class="card-header">Редагувати запис ваги</div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100">Зберегти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

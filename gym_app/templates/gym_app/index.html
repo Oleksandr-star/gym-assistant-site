@@ -1,14 +1,34 @@
 {% extends "gym_app/base.html" %}
 {% block content %}
 <h2 class="page-title">Привіт, {{ user.username }}</h2>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="card-title">{{ total_workouts }}</h3>
+                <p class="card-text">Всього тренувань</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="card-title">{{ avg_weight }} кг</h3>
+                <p class="card-text">Середня робоча вага</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">Останні вправи</div>
             <div class="card-body">
-                {% if exercises %}
+                {% if last_exercises %}
                 <ul class="list-unstyled">
-                    {% for ex in exercises %}
+                    {% for ex in last_exercises %}
                     <li class="mb-2">
                         <strong>{{ ex.name }}</strong> – {{ ex.weight }} кг × {{ ex.reps }}
                         <br><small class="text-muted">{{ ex.date|date:"d.m.Y" }}</small>
@@ -26,11 +46,9 @@
         <div class="card">
             <div class="card-header">Остання вага</div>
             <div class="card-body stats-card">
-                {% if weights %}
-                    {% for w in weights %}
-                    <h3>{{ w.weight }} кг</h3>
-                    <p>{{ w.date|date:"d.m.Y" }}</p>
-                    {% endfor %}
+                {% if last_weight %}
+                    <h3>{{ last_weight.weight }} кг</h3>
+                    <p>{{ last_weight.date|date:"d.m.Y" }}</p>
                 {% else %}
                     <p>Немає записів</p>
                 {% endif %}

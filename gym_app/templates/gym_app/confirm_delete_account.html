@@ -1,0 +1,18 @@
+{% extends "gym_app/base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5 col-md-8">
+        <div class="card">
+            <div class="card-header">Підтвердження видалення</div>
+            <div class="card-body">
+                <p>Ви дійсно хочете видалити {{ type }} "{{ object }}"?</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Так, видалити</button>
+                    <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-secondary">Скасувати</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
