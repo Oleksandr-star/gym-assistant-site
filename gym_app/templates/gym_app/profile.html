@@ -3,6 +3,18 @@
 <h2>Мій профіль</h2>
 <div class="card">
     <div class="card-body">
+        <p>
+            {% if user.userprofile.is_public %}
+                <a href="{% url 'toggle_public' %}" class="btn btn-warning">Зробити профіль приватним</a>
+            {% else %}
+                <a href="{% url 'toggle_public' %}" class="btn btn-success">Зробити профіль публічним</a>
+            {% endif %}
+        </p>
+        <p>
+            {% if user.userprofile.is_public %}
+                Ваш публічний профіль: <a href="{% url 'public_profile' user.username %}">{{ request.build_absolute_uri }}user/{{ user.username }}</a>
+            {% endif %}
+        </p>
         <p><strong>Ім'я користувача:</strong> {{ user.username }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <a href="{% url 'edit_profile' %}" class="btn btn-primary">Редагувати профіль</a>

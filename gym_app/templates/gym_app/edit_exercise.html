@@ -1,5 +1,7 @@
 {% extends "gym_app/base.html" %}
 {% block content %}
+
+<h2 class="page-title">Редагувати вправу</h2>
 <div class="row justify-content-center">
     <div class="col-lg-5 col-md-8">
         <div class="card">
@@ -7,7 +9,26 @@
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    <div class="mb-3">
+                        <label class="form-label">Назва вправи</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Вага (кг)</label>
+                        {{ form.weight }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Кількість повторень</label>
+                        {{ form.reps }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Нотатки</label>
+                        {{ form.notes }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">RPE (1-10)</label>
+                        {{ form.rpe }}
+                    </div>
                     <button type="submit" class="btn btn-primary w-100">Зберегти</button>
                 </form>
             </div>

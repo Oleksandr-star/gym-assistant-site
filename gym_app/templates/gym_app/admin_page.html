@@ -25,6 +25,21 @@
                         <td>{{ u.username }}</td>
                         <td>{{ u.email }}</td>
                         <td>{% if u.is_superuser %}Так{% else %}Ні{% endif %}</td>
+                        <td>
+                            <a href="{% url 'toggle_block' u.id %}" class="btn btn-sm btn-outline-warning">
+                                {% if u.is_active %}Заблокувати{% else %}Розблокувати{% endif %}
+                            </a>
+                            <a href="{% url 'toggle_admin' u.id %}" class="btn btn-sm btn-outline-info">
+                                {% if u.is_superuser %}Забрати адміна{% else %}Зробити адміном{% endif %}
+                            </a>
+                        </td>
+                        <td>
+                            {% if u.userprofile.is_public %}
+                                <a href="{% url 'public_profile' u.username %}">{{ u.username }}</a>
+                            {% else %}
+                                {{ u.username }}
+                            {% endif %}
+                        </td>
                     </tr>
                 {% empty %}
                     <tr><td colspan="3" class="text-center">Немає результатів</td></tr>

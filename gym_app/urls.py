@@ -20,4 +20,9 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('profile/password/', views.change_password, name='change_password'),
     path('profile/delete/', views.delete_account, name='delete_account'),
+    
+    path('toggle-public/', views.toggle_public, name='toggle_public'),
+    path('user/<str:username>/', views.public_profile, name='public_profile'),
+    path('admin-page/toggle-block/<int:user_id>/', views.toggle_block, name='toggle_block'),
+    path('admin-page/toggle-admin/<int:user_id>/', views.toggle_admin, name='toggle_admin'),
 ]

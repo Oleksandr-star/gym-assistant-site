@@ -1,0 +1,16 @@
+{% extends "gym_app/base.html" %}
+{% block content %}
+<h2>Профіль {{ profile_user.username }}</h2>
+<div class="card">
+    <div class="card-body">
+        <p><strong>Тренувань:</strong> {{ total_workouts }}</p>
+        <p><strong>Середня вага:</strong> {{ avg_weight }} кг</p>
+        <h4>Остання вага</h4>
+        <ul>
+            {% for w in weights %}
+                <li>{{ w.date|date:"d.m.Y" }} – {{ w.weight }} кг</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

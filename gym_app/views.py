@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
-from .models import Exercise, WeightRecord
+from .models import Exercise, WeightRecord, UserProfile
 from .forms import RegisterForm, ExerciseForm, WeightForm, UserUpdateForm, ExerciseUpdateForm, WeightUpdateForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -115,7 +115,34 @@ def admin_view(request):
         users = users.filter(
             Q(username__icontains=query) | Q(email__icontains=query)
         )
-    return render(request, 'gym_app/admin_page.html', {'users': users, 'query': query})
+    return render(request, 'gym_app/admin_page.html', {
+        'users': users,
+        'query': query,
+    })
+    
+@login_required
+@user_passes_test(is_admin)
+def toggle_block(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    user.is_active = not user.is_active
+    user.save()
+    status = 'розблоковано' if user.is_active else 'заблоковано'
+    messages.success(request, f'Користувача {user.username} {status}.')
+    return redirect('admin_page')
+
+@login_required
+@user_passes_test(is_admin)
+def toggle_admin(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    if user == request.user:
+        messages.error(request, 'Не можна змінити роль собі.')
+        return redirect('admin_page')
+    user.is_superuser = not user.is_superuser
+    user.is_staff = not user.is_staff
+    user.save()
+    role = 'адміністратора' if user.is_superuser else 'звичайного користувача'
+    messages.success(request, f'Роль {user.username} змінено на {role}.')
+    return redirect('admin_page')
 
 @login_required
 def edit_exercise(request, pk):
@@ -198,3 +225,28 @@ def delete_account(request):
         messages.success(request, 'Акаунт видалено.')
         return redirect('login')
     return render(request, 'gym_app/confirm_delete_account.html')
+
+@login_required
+def toggle_public(request):
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    profile.is_public = not profile.is_public
+    profile.save()
+    return redirect('profile')
+
+def public_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    profile = UserProfile.objects.filter(user=user, is_public=True).first()
+    if not profile:
+        messages.error(request, 'Профіль приватний.')
+        return redirect('index')
+
+    exercises = Exercise.objects.filter(user=user)
+    total_workouts = exercises.count()
+    avg_weight = sum(ex.weight for ex in exercises) / total_workouts if total_workouts else 0
+    weights = WeightRecord.objects.filter(user=user).order_by('-date')[:10]
+    return render(request, 'gym_app/public_profile.html', {
+        'profile_user': user,
+        'total_workouts': total_workouts,
+        'avg_weight': round(avg_weight, 1),
+        'weights': weights,
+    })
